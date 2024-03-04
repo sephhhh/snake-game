@@ -9,12 +9,15 @@ def main():
     pygame.init()
 
     screen = pygame.display.set_mode((900,900))
+    clock = pygame.time.Clock()
     snake = pygame.Rect(450, 450, 50, 50)
     point = pygame.Rect(randomWidth(), randomHeight(),50,50)
-    screen.fill("black")
 
     while True:
+        screen.fill("black")
         drawGrid()
+        pygame.draw.rect(screen, "red", snake)
+        pygame.draw.rect(screen, "green", point)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -30,16 +33,20 @@ def main():
                     snake = snake.move(0,50)
                 elif event.key == pygame.K_UP:
                     snake = snake.move(0,-50)
-
-            pygame.draw.rect(screen, "red", snake)
-            pygame.draw.rect(screen, "green", point)
-            pygame.display.flip()
+        pygame.display.flip()
+        clock.tick(60)
 
 def randomWidth():
-    return random.randint(0,18)*50
+    randomNum = random.randint(0,18)*50
+    while randomNum == 450:
+        randomNum = random.randint(0,18)*50
+    return randomNum
 
 def randomHeight():
-    return random.randint(0,18)*50
+    randomNum = random.randint(0,18)*50
+    while randomNum == 450:
+        randomNum = random.randint(0,18)*50
+    return randomNum
 
 def drawGrid():
     blockSize = 50
