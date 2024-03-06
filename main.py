@@ -8,44 +8,90 @@ def main():
     global screen
     pygame.init()
 
+    x = 450
+    y = 450
     screen = pygame.display.set_mode((900,900))
     clock = pygame.time.Clock()
-    snake = pygame.Rect(450, 450, 50, 50)
     point = pygame.Rect(randomWidth(), randomHeight(),50,50)
+    right = False
+    left = False
+    up = False
+    down = False
+    frame_counter = 0
+ 
 
     while True:
         screen.fill("black")
         drawGrid()
-        pygame.draw.rect(screen, "red", snake)
+        snake = pygame.draw.rect(screen, "red", (x, y ,50, 50))
         pygame.draw.rect(screen, "green", point)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 raise SystemExit
-            elif event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 elif event.key == pygame.K_RIGHT:
-                    snake = snake.move(50,0)
+                    right = True
+                    left = False
+                    up = False
+                    down = False
                 elif event.key == pygame.K_LEFT:
-                    snake = snake.move(-50,0)
+                    right = False
+                    left = True
+                    up = False
+                    down = False
                 elif event.key == pygame.K_DOWN:
-                    snake = snake.move(0,50)
+                    right = False
+                    left = False
+                    up = False
+                    down = True
                 elif event.key == pygame.K_UP:
-                    snake = snake.move(0,-50)
+                    right = False
+                    left = False
+                    up = True
+                    down = False
+        
+        
+        if x == 900:
+            x = 850
+        elif x == 0:
+            x = 0
+        if y == 900:
+            y = 850
+        elif y == 0:
+            y = 0
+
+        if frame_counter == 7:
+            if right == True and x < 850:
+                x+=50
+            elif left == True and x > 0:
+                x-=50
+            elif down == True and y < 850:
+                y+=50
+            elif up == True and y > 0:
+                y-=50
+            
+            frame_counter = 0
+        else:
+            frame_counter+=1
+
         pygame.display.flip()
         clock.tick(60)
 
+
 def randomWidth():
-    randomNum = random.randint(0,18)*50
+    randomNum = random.randint(1,18)*50
+
     while randomNum == 450:
-        randomNum = random.randint(0,18)*50
+        randomNum = random.randint(1,18)*50
     return randomNum
 
 def randomHeight():
-    randomNum = random.randint(0,18)*50
+    randomNum = random.randint(1,18)*50
     while randomNum == 450:
-        randomNum = random.randint(0,18)*50
+        randomNum = random.randint(1,18)*50
     return randomNum
 
 def drawGrid():
