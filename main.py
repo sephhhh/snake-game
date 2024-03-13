@@ -13,7 +13,7 @@ def main():
     screen = pygame.display.set_mode((900,900))
     clock = pygame.time.Clock()
     snake = pygame.Rect(x, y , 50, 50)
-    point = pygame.Rect(randomWidth(), randomHeight(),50,50)
+    point = pygame.Rect(randomWidth(snake), randomHeight(snake),50,50)
     right = False
     left = False
     up = False
@@ -55,7 +55,7 @@ def main():
                     down = False
 
         if snake_draw.colliderect(apple):
-            point.update(randomWidth(), randomHeight(), 50, 50)
+            point.update(randomWidth(snake), randomHeight(snake), 50, 50)
 
 
         if snake.x == 900:
@@ -85,16 +85,16 @@ def main():
         clock.tick(60)
 
 
-def randomWidth():
+def randomWidth(snake):
     randomNum = random.randint(1,17)*50
-    while randomNum == 450:
-        randomNum = random.randint(1,18)*50
+    while randomNum == snake.x:
+        randomNum = random.randint(1,17)*50
     return randomNum
 
-def randomHeight():
+def randomHeight(snake):
     randomNum = random.randint(1,17)*50
-    while randomNum == 450:
-        randomNum = random.randint(1,18)*50
+    while randomNum == snake.y:
+        randomNum = random.randint(1,17)*50
     return randomNum
 
 def drawGrid():
