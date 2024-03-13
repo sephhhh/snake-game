@@ -24,7 +24,7 @@ def main():
         screen.fill("black")
         drawGrid()
         snake = pygame.draw.rect(screen, "red", (x, y ,50, 50))
-        pygame.draw.rect(screen, "green", point)
+        apple = pygame.draw.rect(screen, "green", point)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -52,8 +52,10 @@ def main():
                     left = False
                     up = True
                     down = False
-        
-        
+
+        if snake.colliderect(apple):
+            point.update(randomWidth(), randomHeight(), 50, 50)
+
         if x == 900:
             x = 850
         elif x == 0:
