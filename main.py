@@ -77,13 +77,13 @@ def main():
             if down == True:
                 createCopy(copy_counter, snake)
                 if len(copies) > 1:
-                    copies[f"copy{len(copies) - 1}"].top = copies[f"copy{len(copies) - 2}"].left - 50
+                    copies[f"copy{len(copies) - 1}"].top = copies[f"copy{len(copies) - 2}"].top - 50
                 else:
                     copies[f"copy{len(copies) - 1}"].top -= 50
             if up == True:
                 createCopy(copy_counter, snake)
                 if len(copies) > 1:
-                    copies[f"copy{len(copies) - 1}"].top = copies[f"copy{len(copies) - 2}"].left + 50
+                    copies[f"copy{len(copies) - 1}"].top = copies[f"copy{len(copies) - 2}"].top + 50
                 else:
                     copies[f"copy{len(copies) - 1}"].top += 50
             copy_counter+=1
@@ -111,7 +111,6 @@ def main():
                     copies[f"copy{len(copies) - 1}"].top = snake.y
                     if copies[f"copy{len(copies) - 1}"].left == snake.x - 50:
                         copies[f"copy{len(copies) - 1}"].left = snake.x - 100
-                        print('this runs')
                     copies[f"copy{len(copies) - 1}"].left += 50
             elif left == True and snake.x > 0:
                 snake.x-=50
@@ -119,7 +118,6 @@ def main():
                     copies[f"copy{len(copies) - 1}"].top = snake.y
                     if copies[f"copy{len(copies) - 1}"].left == snake.x + 50:
                         copies[f"copy{len(copies) - 1}"].left = snake.x + 100
-                        print('this runs')
                     copies[f"copy{len(copies) - 1}"].left -= 50
             elif down == True and snake.y < 850:
                 snake.y+=50
@@ -127,7 +125,6 @@ def main():
                     copies[f"copy{len(copies) - 1}"].left = snake.x
                     if copies[f"copy{len(copies) - 1}"].top == snake.y - 50:
                         copies[f"copy{len(copies) - 1}"].top = snake.y - 100
-                        print('this runs')
                     copies[f"copy{len(copies) - 1}"].top += 50
             elif up == True and snake.y > 0:
                 snake.y-=50
@@ -135,7 +132,6 @@ def main():
                     copies[f"copy{len(copies) - 1}"].left = snake.x
                     if copies[f"copy{len(copies) - 1}"].top == snake.y + 50:
                         copies[f"copy{len(copies) - 1}"].top = snake.y + 100
-                        print('this runs')
                     copies[f"copy{len(copies) - 1}"].top -= 50
                 
             frame_counter = 0
