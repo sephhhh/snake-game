@@ -5,20 +5,25 @@ import random
 
 
 def main():
-    global screen
+    global screen, copies
     pygame.init()
 
     x = 450
     y = 450
+    l = 50
+    w = 50
     screen = pygame.display.set_mode((900,900))
     clock = pygame.time.Clock()
     snake = pygame.Rect(x, y , 50, 50)
-    point = pygame.Rect(randomWidth(snake), randomHeight(snake),50,50)
+    point = pygame.Rect(randomWidth(snake), randomHeight(snake),w,l)
     right = False
     left = False
     up = False
     down = False
     frame_counter = 0
+    copy_counter = 0
+    copies = {}
+    rect_visible = False
  
 
     while True:
@@ -55,8 +60,37 @@ def main():
                     down = False
 
         if snake_draw.colliderect(apple):
+            rect_visible = True
             point.update(randomWidth(snake), randomHeight(snake), 50, 50)
+            if right == True:
+                createCopy(copy_counter, snake)
+                if len(copies) > 1:
+                    copies[f"copy{len(copies) - 1}"].left = copies[f"copy{len(copies) - 2}"].left - 50
+                else:
+                    copies[f"copy{len(copies) - 1}"].left -= 50
+            if left == True:
+                createCopy(copy_counter, snake)
+                if len(copies) > 1:
+                    copies[f"copy{len(copies) - 1}"].left = copies[f"copy{len(copies) - 2}"].left + 50
+                else:
+                    copies[f"copy{len(copies) - 1}"].left += 50
+            if down == True:
+                createCopy(copy_counter, snake)
+                if len(copies) > 1:
+                    copies[f"copy{len(copies) - 1}"].top = copies[f"copy{len(copies) - 2}"].left - 50
+                else:
+                    copies[f"copy{len(copies) - 1}"].top -= 50
+            if up == True:
+                createCopy(copy_counter, snake)
+                if len(copies) > 1:
+                    copies[f"copy{len(copies) - 1}"].top = copies[f"copy{len(copies) - 2}"].left + 50
+                else:
+                    copies[f"copy{len(copies) - 1}"].top += 50
+            copy_counter+=1
 
+        if rect_visible:
+            for i in range(0, len(copies)):
+                pygame.draw.rect(screen, "red", copies[f"copy{i}"])
 
         if snake.x == 900:
             snake.x = 850
@@ -70,20 +104,54 @@ def main():
         if frame_counter == 7:
             if right == True and snake.x < 850:
                 snake.x+=50
+                if copies:
+                    copies[f"copy{len(copies) - 1}"].top = snake.y
+
+                if copies:
+                    copies[f"copy{len(copies) - 1}"].top = snake.y
+                    if copies[f"copy{len(copies) - 1}"].left == snake.x - 50:
+                        copies[f"copy{len(copies) - 1}"].left = snake.x - 100
+                        print('this runs')
+                    copies[f"copy{len(copies) - 1}"].left += 50
             elif left == True and snake.x > 0:
                 snake.x-=50
+                if copies:
+                    copies[f"copy{len(copies) - 1}"].top = snake.y
+                    if copies[f"copy{len(copies) - 1}"].left == snake.x + 50:
+                        copies[f"copy{len(copies) - 1}"].left = snake.x + 100
+                        print('this runs')
+                    copies[f"copy{len(copies) - 1}"].left -= 50
             elif down == True and snake.y < 850:
                 snake.y+=50
+                if copies:
+                    copies[f"copy{len(copies) - 1}"].left = snake.x
+                    if copies[f"copy{len(copies) - 1}"].top == snake.y - 50:
+                        copies[f"copy{len(copies) - 1}"].top = snake.y - 100
+                        print('this runs')
+                    copies[f"copy{len(copies) - 1}"].top += 50
             elif up == True and snake.y > 0:
                 snake.y-=50
-            
+                if copies:
+                    copies[f"copy{len(copies) - 1}"].left = snake.x
+                    if copies[f"copy{len(copies) - 1}"].top == snake.y + 50:
+                        copies[f"copy{len(copies) - 1}"].top = snake.y + 100
+                        print('this runs')
+                    copies[f"copy{len(copies) - 1}"].top -= 50
+                
             frame_counter = 0
         else:
             frame_counter+=1
+        
+
 
         pygame.display.flip()
         clock.tick(60)
 
+def createCopy(copy_counter, snake):
+    for i in range(0, copy_counter + 1):
+            key = f"copy{i}"
+            if key not in copies:
+                copies[key] = snake.copy()
 
 def randomWidth(snake):
     randomNum = random.randint(1,17)*50
