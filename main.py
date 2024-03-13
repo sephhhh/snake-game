@@ -12,6 +12,7 @@ def main():
     y = 450
     screen = pygame.display.set_mode((900,900))
     clock = pygame.time.Clock()
+    snake = pygame.Rect(x, y , 50, 50)
     point = pygame.Rect(randomWidth(), randomHeight(),50,50)
     right = False
     left = False
@@ -23,7 +24,7 @@ def main():
     while True:
         screen.fill("black")
         drawGrid()
-        snake = pygame.draw.rect(screen, "red", (x, y ,50, 50))
+        snake_draw = pygame.draw.rect(screen, "red", snake)
         apple = pygame.draw.rect(screen, "green", point)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -53,27 +54,28 @@ def main():
                     up = True
                     down = False
 
-        if snake.colliderect(apple):
+        if snake_draw.colliderect(apple):
             point.update(randomWidth(), randomHeight(), 50, 50)
 
-        if x == 900:
-            x = 850
-        elif x == 0:
-            x = 0
-        if y == 900:
-            y = 850
-        elif y == 0:
-            y = 0
+
+        if snake.x == 900:
+            snake.x = 850
+        elif snake.x == 0:
+            snake.x = 0
+        if snake.y == 900:
+            snake.y = 850
+        elif snake.y == 0:
+            snake.y = 0
 
         if frame_counter == 7:
-            if right == True and x < 850:
-                x+=50
-            elif left == True and x > 0:
-                x-=50
-            elif down == True and y < 850:
-                y+=50
-            elif up == True and y > 0:
-                y-=50
+            if right == True and snake.x < 850:
+                snake.x+=50
+            elif left == True and snake.x > 0:
+                snake.x-=50
+            elif down == True and snake.y < 850:
+                snake.y+=50
+            elif up == True and snake.y > 0:
+                snake.y-=50
             
             frame_counter = 0
         else:
@@ -84,14 +86,13 @@ def main():
 
 
 def randomWidth():
-    randomNum = random.randint(1,18)*50
-
+    randomNum = random.randint(1,17)*50
     while randomNum == 450:
         randomNum = random.randint(1,18)*50
     return randomNum
 
 def randomHeight():
-    randomNum = random.randint(1,18)*50
+    randomNum = random.randint(1,17)*50
     while randomNum == 450:
         randomNum = random.randint(1,18)*50
     return randomNum
