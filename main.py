@@ -101,38 +101,54 @@ def main():
         elif snake.y == 0:
             snake.y = 0
 
+        
+        
+
         if frame_counter == 7:
             if right == True and snake.x < 850:
                 snake.x+=50
                 if copies:
-                    copies[f"copy{len(copies) - 1}"].top = snake.y
-
-                if copies:
-                    copies[f"copy{len(copies) - 1}"].top = snake.y
-                    if copies[f"copy{len(copies) - 1}"].left == snake.x - 50:
-                        copies[f"copy{len(copies) - 1}"].left = snake.x - 100
-                    copies[f"copy{len(copies) - 1}"].left += 50
+                    for i in range(0, len(copies)):
+                        if copies[f"copy{i}"].top == snake.y:
+                            copies[f"copy{i}"].left += 50
+                        if copies[f"copy{i}"].top > snake.y:
+                            copies[f"copy{i}"].top -= 50
+                        elif copies[f"copy{i}"].top < snake.y:
+                            copies[f"copy{i}"].top += 50
+    
             elif left == True and snake.x > 0:
                 snake.x-=50
                 if copies:
-                    copies[f"copy{len(copies) - 1}"].top = snake.y
-                    if copies[f"copy{len(copies) - 1}"].left == snake.x + 50:
-                        copies[f"copy{len(copies) - 1}"].left = snake.x + 100
-                    copies[f"copy{len(copies) - 1}"].left -= 50
+                    for i in range(0, len(copies)):
+                        if copies[f"copy{i}"].top == snake.y:
+                            copies[f"copy{i}"].left -= 50
+                        if copies[f"copy{i}"].top > snake.y:
+                            copies[f"copy{i}"].top -= 50
+                        elif copies[f"copy{i}"].top < snake.y:
+                            copies[f"copy{i}"].top += 50
+
+
             elif down == True and snake.y < 850:
                 snake.y+=50
                 if copies:
-                    copies[f"copy{len(copies) - 1}"].left = snake.x
-                    if copies[f"copy{len(copies) - 1}"].top == snake.y - 50:
-                        copies[f"copy{len(copies) - 1}"].top = snake.y - 100
-                    copies[f"copy{len(copies) - 1}"].top += 50
+                    for i in range(0, len(copies)):
+                        if copies[f"copy{i}"].left == snake.x:
+                            copies[f"copy{i}"].top += 50
+                        if copies[f"copy{i}"].left > snake.x:
+                            copies[f"copy{i}"].left -= 50
+                        elif copies[f"copy{i}"].left < snake.x:
+                            copies[f"copy{i}"].left += 50
+
             elif up == True and snake.y > 0:
                 snake.y-=50
                 if copies:
-                    copies[f"copy{len(copies) - 1}"].left = snake.x
-                    if copies[f"copy{len(copies) - 1}"].top == snake.y + 50:
-                        copies[f"copy{len(copies) - 1}"].top = snake.y + 100
-                    copies[f"copy{len(copies) - 1}"].top -= 50
+                    for i in range(0, len(copies)):
+                        if copies[f"copy{i}"].left == snake.x:
+                            copies[f"copy{i}"].top -= 50
+                        if copies[f"copy{i}"].left > snake.x:
+                            copies[f"copy{i}"].left -= 50
+                        elif copies[f"copy{i}"].left < snake.x:
+                            copies[f"copy{i}"].left += 50
                 
             frame_counter = 0
         else:
