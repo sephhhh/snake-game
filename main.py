@@ -1,5 +1,6 @@
 import pygame
 import random
+from collections import deque
 
 
 
@@ -7,6 +8,8 @@ import random
 def main():
     global screen, copies
     pygame.init()
+
+    input_queue = deque()
 
     x = 450
     y = 450
@@ -39,21 +42,25 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 elif event.key == pygame.K_RIGHT:
+                    input_queue.append('RIGHT')
                     right = True
                     left = False
                     up = False
                     down = False
                 elif event.key == pygame.K_LEFT:
+                    input_queue.append('LEFT')
                     right = False
                     left = True
                     up = False
                     down = False
                 elif event.key == pygame.K_DOWN:
+                    input_queue.append('DOWN')
                     right = False
                     left = False
                     up = False
                     down = True
                 elif event.key == pygame.K_UP:
+                    input_queue.append('UP')
                     right = False
                     left = False
                     up = True
@@ -105,50 +112,100 @@ def main():
         
 
         if frame_counter == 7:
-            if right == True and snake.x < 850:
-                snake.x+=50
-                if copies:
-                    for i in range(0, len(copies)):
-                        if copies[f"copy{i}"].top == snake.y:
-                            copies[f"copy{i}"].left += 50
-                        if copies[f"copy{i}"].top > snake.y:
-                            copies[f"copy{i}"].top -= 50
-                        elif copies[f"copy{i}"].top < snake.y:
-                            copies[f"copy{i}"].top += 50
-    
-            elif left == True and snake.x > 0:
-                snake.x-=50
-                if copies:
-                    for i in range(0, len(copies)):
-                        if copies[f"copy{i}"].top == snake.y:
-                            copies[f"copy{i}"].left -= 50
-                        if copies[f"copy{i}"].top > snake.y:
-                            copies[f"copy{i}"].top -= 50
-                        elif copies[f"copy{i}"].top < snake.y:
-                            copies[f"copy{i}"].top += 50
+            if input_queue:
+                print(input_queue)
+                direction = input_queue[0]
+                #if right == True and snake.x < 850:
+                if direction == "RIGHT" and snake.x < 900:
+                    snake.x+=50
+                    print(f"snake: {snake}")
+                    if copies:
+                        for i in range(0, len(copies)):
+                            key = f'copy{i}'
+                            value = copies[key]
+                            print(f"{key}: {value}")
+                            if copies[f"copy{i}"].top == snake.y:
+                                copies[f"copy{i}"].left += 50
+                            if copies[f"copy{i}"].top > snake.y:
+                                copies[f"copy{i}"].top -= 50
+                            elif copies[f"copy{i}"].top < snake.y:
+                                copies[f"copy{i}"].top += 50
+                    if right != True:
+                        print('this runs')
+                        input_queue.popleft()
+                    print('-------')
+        
+                #elif left == True and snake.x > 0:
+                elif direction == "LEFT" and snake.x > 0:
+                    snake.x-=50
+                    print('left runs')
+                    print(f"snake: {snake}")
+                    if copies:
+                        for i in range(0, len(copies)):
+                            key = f'copy{i}'
+                            value = copies[key]
+                            print(f"{key}: {value}")
 
+                            if copies[f"copy{i}"].top == snake.y:
+                                copies[f"copy{i}"].left -= 50
+                            if copies[f"copy{i}"].top > snake.y:
+                                copies[f"copy{i}"].top -= 50
+                            elif copies[f"copy{i}"].top < snake.y:
+                                copies[f"copy{i}"].top += 50
+                    if left != True:
+                        input_queue.popleft()
+                    print('-------')
 
-            elif down == True and snake.y < 850:
-                snake.y+=50
-                if copies:
-                    for i in range(0, len(copies)):
-                        if copies[f"copy{i}"].left == snake.x:
-                            copies[f"copy{i}"].top += 50
-                        if copies[f"copy{i}"].left > snake.x:
-                            copies[f"copy{i}"].left -= 50
-                        elif copies[f"copy{i}"].left < snake.x:
-                            copies[f"copy{i}"].left += 50
+                #elif down == True and snake.y < 850:
+                elif direction == "DOWN" and snake.y < 850:
+                    snake.y+=50
+                    print(f"snake: {snake}")
+                    if copies:
+                        for i in range(0, len(copies)):
+                            key = f'copy{i}'
+                            value = copies[key]
+                            print(f"{key}: {value}")
+                            if copies[f"copy{i}"].left == snake.x:
+                                copies[f"copy{i}"].top += 50
+                            if copies[f"copy{i}"].left > snake.x:
+                                copies[f"copy{i}"].left -= 50
+                            elif copies[f"copy{i}"].left < snake.x:
+                                copies[f"copy{i}"].left += 50
+                    if down != True:
+                        input_queue.popleft()
 
-            elif up == True and snake.y > 0:
-                snake.y-=50
-                if copies:
-                    for i in range(0, len(copies)):
-                        if copies[f"copy{i}"].left == snake.x:
-                            copies[f"copy{i}"].top -= 50
-                        if copies[f"copy{i}"].left > snake.x:
-                            copies[f"copy{i}"].left -= 50
-                        elif copies[f"copy{i}"].left < snake.x:
-                            copies[f"copy{i}"].left += 50
+                    print('-------')
+
+                #elif up == True and snake.y > 0:
+                elif direction == "UP" and snake.y > 0:
+                    snake.y-=50
+                    print('up runs')
+                    print(f"snake: {snake}")
+                    if copies:
+                        for i in range(0, len(copies)):
+                            key = f'copy{i}'
+                            value = copies[key]
+                            print(f"{key}: {value}")
+                            count = len(copies)
+                            if copies[f"copy{i}"].left == snake.x:
+                                copies[f"copy{i}"].top -= 50
+                                print(f'snakes moves up #{i}')
+                                if count == 0:
+                                    input_queue.popleft()
+                            if copies[f"copy{i}"].left > snake.x:
+                                print("this runs")
+                                copies[f"copy{i}"].left -= 50
+                            elif copies[f"copy{i}"].left < snake.x:
+                                print("this runs")
+                                copies[f"copy{i}"].left += 50
+                        count -= 1
+                    if up == False:
+                        print('this runs')
+                        input_queue.popleft()
+
+                            
+                    print('-------')
+
                 
             frame_counter = 0
         else:
