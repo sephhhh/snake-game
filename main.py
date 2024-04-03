@@ -17,7 +17,7 @@ def main():
     clock = pygame.time.Clock()
     snake_segments = [pygame.Rect(x, y , 50, 50)]
     
-    point = pygame.Rect(300, 800,w,l)
+    point = pygame.Rect(randX(snake_segments), randY(snake_segments),w,l)
     right = False
     left = False
     up = False
@@ -70,10 +70,10 @@ def main():
                 snake_segments.append(pygame.Rect(head.x+50, head.y, 50, 50))
             elif down == True:
                 snake_segments.append(pygame.Rect(head.x, head.y-50, 50, 50))
-            else:
+            elif up==True:
                 snake_segments.append(pygame.Rect(head.x, head.y+50, 50, 50))
 
-            point = pygame.Rect(100, 300,w,l)
+            point = pygame.Rect(randX(snake_segments), randY(snake_segments),w,l)
 
         if frame_counter == 7:
             if right == True and head.x < 850:                    
@@ -102,7 +102,19 @@ def main():
 
 
 def randX(snake):
-    numX = random.randint(0,18)*50
+    numX = random.randint(0,17)*50
+    for seg in snake:
+        while numX == seg.x:
+            numX = random.randint(0,17)*50
+    return numX
+
+def randY(snake):
+    numY = random.randint(0,17)*50
+    for seg in snake:
+        while numY == seg.y:
+            numY = random.randint(0,17)*50
+    return numY
+
 
 def drawGrid():
     blockSize = 50
