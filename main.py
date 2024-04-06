@@ -1,6 +1,10 @@
 import pygame
 import random
+<<<<<<< HEAD
 from collections import deque
+=======
+import threading
+>>>>>>> snake-2
 
 
 
@@ -17,22 +21,21 @@ def main():
     w = 50
     screen = pygame.display.set_mode((900,900))
     clock = pygame.time.Clock()
-    snake = pygame.Rect(x, y , 50, 50)
-    point = pygame.Rect(randomWidth(snake), randomHeight(snake),w,l)
+    snake_segments = [pygame.Rect(x, y , 50, 50)]
+    
+    point = pygame.Rect(randX(snake_segments), randY(snake_segments),w,l)
     right = False
     left = False
     up = False
     down = False
     frame_counter = 0
-    copy_counter = 0
-    copies = {}
-    rect_visible = False
- 
+
 
     while True:
         screen.fill("black")
         drawGrid()
-        snake_draw = pygame.draw.rect(screen, "red", snake)
+        for segment in snake_segments:
+            pygame.draw.rect(screen,"red", segment)
         apple = pygame.draw.rect(screen, "green", point)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -40,6 +43,8 @@ def main():
                 raise SystemExit
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    print(snake_segments)
+                    print(snake_segments[0].x)
                     pygame.quit()
                 elif event.key == pygame.K_RIGHT:
                     input_queue.append('RIGHT')
@@ -65,53 +70,29 @@ def main():
                     left = False
                     up = True
                     down = False
-
-        if snake_draw.colliderect(apple):
-            rect_visible = True
-            point.update(randomWidth(snake), randomHeight(snake), 50, 50)
+                    
+        head = snake_segments[0].copy()
+        
+        if apple.colliderect(head):
             if right == True:
-                createCopy(copy_counter, snake)
-                if len(copies) > 1:
-                    copies[f"copy{len(copies) - 1}"].left = copies[f"copy{len(copies) - 2}"].left - 50
-                else:
-                    copies[f"copy{len(copies) - 1}"].left -= 50
-            if left == True:
-                createCopy(copy_counter, snake)
-                if len(copies) > 1:
-                    copies[f"copy{len(copies) - 1}"].left = copies[f"copy{len(copies) - 2}"].left + 50
-                else:
-                    copies[f"copy{len(copies) - 1}"].left += 50
-            if down == True:
-                createCopy(copy_counter, snake)
-                if len(copies) > 1:
-                    copies[f"copy{len(copies) - 1}"].top = copies[f"copy{len(copies) - 2}"].top - 50
-                else:
-                    copies[f"copy{len(copies) - 1}"].top -= 50
-            if up == True:
-                createCopy(copy_counter, snake)
-                if len(copies) > 1:
-                    copies[f"copy{len(copies) - 1}"].top = copies[f"copy{len(copies) - 2}"].top + 50
-                else:
-                    copies[f"copy{len(copies) - 1}"].top += 50
-            copy_counter+=1
+                snake_segments.append(pygame.Rect(head.x-50, head.y, 50, 50))
+            elif left == True:
+                snake_segments.append(pygame.Rect(head.x+50, head.y, 50, 50))
+            elif down == True:
+                snake_segments.append(pygame.Rect(head.x, head.y-50, 50, 50))
+            elif up==True:
+                snake_segments.append(pygame.Rect(head.x, head.y+50, 50, 50))
 
-        if rect_visible:
-            for i in range(0, len(copies)):
-                pygame.draw.rect(screen, "red", copies[f"copy{i}"])
+            point = pygame.Rect(randX(snake_segments), randY(snake_segments),w,l)
 
-        if snake.x == 900:
-            snake.x = 850
-        elif snake.x == 0:
-            snake.x = 0
-        if snake.y == 900:
-            snake.y = 850
-        elif snake.y == 0:
-            snake.y = 0
-
-        
-        
-
+        if len(snake_segments) > 1:
+            for segment in snake_segments[1:]:
+                if head == segment:
+                    pygame.quit()
+                    raise SystemExit
+                
         if frame_counter == 7:
+<<<<<<< HEAD
             if input_queue:
                 print(input_queue)
                 direction = input_queue[0]
@@ -206,33 +187,64 @@ def main():
                             
                     print('-------')
 
+=======
+            if right == True:
+                if head.x < 850:                    
+                    head.x+=50
+                    snake_segments.insert(0, head)
+                    snake_segments.pop()
+                else:
+                    pygame.quit()
+                    raise SystemExit
+            elif left == True:
+                if head.x > 0:
+                    head.x-=50
+                    snake_segments.insert(0, head)
+                    snake_segments.pop()
+                else:
+                    pygame.quit()
+                    raise SystemExit
+            elif down == True:
+                if head.y < 850:
+                    head.y+=50
+                    snake_segments.insert(0, head)
+                    snake_segments.pop()
+                else:
+                    pygame.quit()
+                    raise SystemExit
+            elif up == True:
+                if head.y > 0:
+                    head.y-=50
+                    snake_segments.insert(0, head)
+                    snake_segments.pop()
+                else:
+                    pygame.quit()
+                    raise SystemExit
+                    
+>>>>>>> snake-2
                 
             frame_counter = 0
         else:
             frame_counter+=1
-        
-
 
         pygame.display.flip()
         clock.tick(60)
 
-def createCopy(copy_counter, snake):
-    for i in range(0, copy_counter + 1):
-            key = f"copy{i}"
-            if key not in copies:
-                copies[key] = snake.copy()
 
-def randomWidth(snake):
-    randomNum = random.randint(1,17)*50
-    while randomNum == snake.x:
-        randomNum = random.randint(1,17)*50
-    return randomNum
+def randX(snake):
+    numX = random.randint(0,17)*50
+    for seg in snake:
+        while numX == seg.x:
+            numX = random.randint(0,17)*50
+    return numX
 
-def randomHeight(snake):
-    randomNum = random.randint(1,17)*50
-    while randomNum == snake.y:
-        randomNum = random.randint(1,17)*50
-    return randomNum
+def randY(snake):
+    numY = random.randint(0,17)*50
+    for seg in snake:
+        while numY == seg.y:
+            numY = random.randint(0,17)*50
+    return numY
+
 
 def drawGrid():
     blockSize = 50
@@ -240,6 +252,7 @@ def drawGrid():
         for y in range(0, 900, blockSize):
             rect = pygame.Rect(x,y, blockSize, blockSize)
             pygame.draw.rect(screen, "white", rect, 1)
+
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,10 @@
-    if snake_draw.colliderect(apple):
-                point.update(randomWidth(snake), randomHeight(snake), 50, 50)
-                if right == True:
-                    createCopy(copy_counter, snake)
-                    copies[f"copy{len(copies) - 1}"].left -= 200
-                    pygame.draw.rect(screen, "red", copies[f"copy{len(copies) - 1}"])
-                copy_counter+=1
+def movesRight(snake):
+    snake.x+=50
+    if copies:
+        for i in range(0, len(copies)):
+            if copies[f"copy{i}"].top == snake.y:
+                copies[f"copy{i}"].left += 50
+            if copies[f"copy{i}"].top > snake.y:
+                copies[f"copy{i}"].top -= 50
+            elif copies[f"copy{i}"].top < snake.y:
+                copies[f"copy{i}"].top += 50    
