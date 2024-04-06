@@ -75,7 +75,12 @@ def main():
 
             point = pygame.Rect(randX(snake_segments), randY(snake_segments),w,l)
 
-
+        if len(snake_segments) > 1:
+            for segment in snake_segments[1:]:
+                if head == segment:
+                    pygame.quit()
+                    raise SystemExit
+                
         if frame_counter == 7:
             if right == True:
                 if head.x < 850:                    
@@ -101,7 +106,6 @@ def main():
                 else:
                     pygame.quit()
                     raise SystemExit
-                    
             elif up == True:
                 if head.y > 0:
                     head.y-=50
