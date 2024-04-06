@@ -41,25 +41,29 @@ def main():
                     print(snake_segments[0].x)
                     pygame.quit()
                 elif event.key == pygame.K_RIGHT:
-                    right = True
-                    left = False
-                    up = False
-                    down = False
+                    if len(snake_segments) == 1 or left == False:
+                        right = True
+                        left = False
+                        up = False
+                        down = False
                 elif event.key == pygame.K_LEFT:
-                    right = False
-                    left = True
-                    up = False
-                    down = False
+                    if len(snake_segments) == 1 or right == False:
+                        right = False
+                        left = True
+                        up = False
+                        down = False
                 elif event.key == pygame.K_DOWN:
-                    right = False
-                    left = False
-                    up = False
-                    down = True
+                    if len(snake_segments) == 1 or up == False:
+                        right = False
+                        left = False
+                        up = False
+                        down = True
                 elif event.key == pygame.K_UP:
-                    right = False
-                    left = False
-                    up = True
-                    down = False
+                    if len(snake_segments) == 1 or down == False:
+                        right = False
+                        left = False
+                        up = True
+                        down = False
                     
         head = snake_segments[0].copy()
         
