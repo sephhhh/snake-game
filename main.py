@@ -75,29 +75,46 @@ def main():
 
             point = pygame.Rect(randX(snake_segments), randY(snake_segments),w,l)
 
-        if frame_counter == 35:
-            if right == True and head.x < 850:                    
-                head.x+=50
-    
-            elif left == True and head.x > 0:
-                head.x-=50
-                print(head.x)
 
-
-            elif down == True and head.y < 850:
-                head.y+=50
-
-            elif up == True and head.y > 0:
-                head.y-=50
-            
-            snake_segments.insert(0, head)
-            snake_segments.pop()
+        if frame_counter == 7:
+            if right == True:
+                if head.x < 850:                    
+                    head.x+=50
+                    snake_segments.insert(0, head)
+                    snake_segments.pop()
+                else:
+                    pygame.quit()
+                    raise SystemExit
+            elif left == True:
+                if head.x > 0:
+                    head.x-=50
+                    snake_segments.insert(0, head)
+                    snake_segments.pop()
+                else:
+                    pygame.quit()
+                    raise SystemExit
+            elif down == True:
+                if head.y < 850:
+                    head.y+=50
+                    snake_segments.insert(0, head)
+                    snake_segments.pop()
+                else:
+                    pygame.quit()
+                    raise SystemExit
+                    
+            elif up == True:
+                if head.y > 0:
+                    head.y-=50
+                    snake_segments.insert(0, head)
+                    snake_segments.pop()
+                else:
+                    pygame.quit()
+                    raise SystemExit
+                    
                 
             frame_counter = 0
         else:
             frame_counter+=1
-        
-
 
         pygame.display.flip()
         clock.tick(60)
